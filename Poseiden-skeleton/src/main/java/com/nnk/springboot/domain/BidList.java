@@ -8,21 +8,40 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "bidlist")
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class BidList {
     // TODO: Map columns in data table BIDLIST with corresponding java fields
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "BidListId", nullable = false)
-    Integer BidListId;
+    Integer bidListId;
+
     @Column(name = "account", length = 30, nullable = false)
+    @NotBlank(message = "Account is mandatory")
     String account;
+
+    @NotBlank(message = "Type is mandatory")
     @Column(name = "type", length = 30, nullable = false)
     String type;
+
+    @NotNull(message = "Bid Quantity is mandatory")
+    @Positive(message = "Bid Quantity must be positive")
     @Column(name = "bidQuantity")
     Double bidQuantity;
+    
     @Column(name = "askQuantity")
     Double askQuantity;
     Double bid;

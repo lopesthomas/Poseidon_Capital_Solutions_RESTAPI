@@ -1,6 +1,12 @@
 package com.nnk.springboot.controllers;
 
 import com.nnk.springboot.domain.BidList;
+import com.nnk.springboot.repositories.BidListRepository;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -12,13 +18,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import jakarta.validation.Valid;
 
 
+
 @Controller
 public class BidListController {
     // TODO: Inject Bid service
+    @Autowired
+    private BidListRepository bidListRepository;
 
     @RequestMapping("/bidList/list")
     public String home(Model model)
     {
+        List<BidList> bidList = bidListRepository.findAll();
+        model.addAttribute("bidList", bidList);
+
+        String remoteUser = SecurityContextHolder.getContext().getAuthentication().getName();
+        model.addAttribute("remoteUser", remoteUser); // <- ajoute cette ligne
         // TODO: call service find all bids to show to the view
         return "bidList/list";
     }
@@ -31,12 +45,24 @@ public class BidListController {
     @PostMapping("/bidList/validate")
     public String validate(@Valid BidList bid, BindingResult result, Model model) {
         // TODO: check data valid and save to db, after saving return bid list
-        return "bidList/add";
+        if (result.hasFieldErrors()) {
+            model.addAttribute("bidList", bid);
+            return "bidList/add"; // ou "bidList/update" selon le cas
+        }
+        bidListRepository.save(bid);
+        return "redirect:/bidList/list";
     }
 
     @GetMapping("/bidList/update/{id}")
     public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
         // TODO: get Bid by Id and to model then show to the form
+        BidList bidList = bidListRepository.findById(id).orElse(null);
+        if (bidList != null) {
+            model.addAttribute("bidList", bidList);
+        } else {
+            // Handle the case where the bid is not found
+            model.addAttribute("error", "Bid not found");
+        }
         return "bidList/update";
     }
 
@@ -44,12 +70,26 @@ public class BidListController {
     public String updateBid(@PathVariable("id") Integer id, @Valid BidList bidList,
                              BindingResult result, Model model) {
         // TODO: check required fields, if valid call service to update Bid and return list Bid
+        if (result.hasErrors()) {
+            bidList.setBidListId(id);
+            return "bidList/update";
+        } else {
+            bidList.setBidListId(id);
+            bidListRepository.save(bidList);
+        }
         return "redirect:/bidList/list";
     }
 
     @GetMapping("/bidList/delete/{id}")
     public String deleteBid(@PathVariable("id") Integer id, Model model) {
         // TODO: Find Bid by Id and delete the bid, return to Bid list
+        BidList bidList = bidListRepository.findById(id).orElse(null);
+        if (bidList != null) {
+            bidListRepository.delete(bidList);
+        } else {
+            // Handle the case where the bid is not found
+            model.addAttribute("error", "Bid not found");
+        }
         return "redirect:/bidList/list";
     }
 }

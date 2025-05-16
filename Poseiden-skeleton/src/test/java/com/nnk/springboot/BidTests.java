@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -27,6 +29,7 @@ public class BidTests {
 		bid = bidListRepository.save(bid);
 		Assert.assertNotNull(bid.getBidListId());
 		Assert.assertEquals(bid.getBidQuantity(), 10d, 10d);
+		//assertNotNull(bid);
 
 		// Update
 		bid.setBidQuantity(20d);
