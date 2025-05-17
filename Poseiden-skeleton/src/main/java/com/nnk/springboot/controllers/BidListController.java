@@ -32,7 +32,7 @@ public class BidListController {
         model.addAttribute("bidList", bidList);
 
         String remoteUser = SecurityContextHolder.getContext().getAuthentication().getName();
-        model.addAttribute("remoteUser", remoteUser); // <- ajoute cette ligne
+        model.addAttribute("remoteUser", remoteUser);
         // TODO: call service find all bids to show to the view
         return "bidList/list";
     }
@@ -60,8 +60,8 @@ public class BidListController {
         if (bidList != null) {
             model.addAttribute("bidList", bidList);
         } else {
-            // Handle the case where the bid is not found
             model.addAttribute("error", "Bid not found");
+            return "403";
         }
         return "bidList/update";
     }
@@ -87,7 +87,6 @@ public class BidListController {
         if (bidList != null) {
             bidListRepository.delete(bidList);
         } else {
-            // Handle the case where the bid is not found
             model.addAttribute("error", "Bid not found");
         }
         return "redirect:/bidList/list";
