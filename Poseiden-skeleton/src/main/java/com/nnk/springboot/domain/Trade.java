@@ -4,21 +4,39 @@ import java.sql.Timestamp;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 
 @Entity
 @Table(name = "trade")
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Trade {
     // TODO: Map columns in data table TRADE with corresponding java fields
 
     @Id
     @Column(name = "tradeId")
-    Integer tradeId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    Integer id;
+    @NotBlank(message = "Account is mandatory")
     String account;
+    @NotBlank(message = "Type is mandatory")
     String type;
     @Column(name = "buyQuantity")
+    @Positive(message = "Buy Quantity must be positive or zero")
+    @NotNull(message = "Buy Quantity is mandatory")
     Double buyQuantity;
     @Column(name = "sellQuantity")
     Double sellQuantity;
