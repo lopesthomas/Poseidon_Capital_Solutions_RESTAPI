@@ -17,16 +17,25 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import jakarta.validation.Valid;
 
+/**
+ * Controller to manage RuleName entities.
+ * Provides endpoints for listing, creating, updating, and deleting rules.
+ */
 @Controller
 public class RuleNameController {
-    // TODO: Inject RuleName service
-    @Autowired
-    private RuleNameService ruleNameService;;
 
+    @Autowired
+    private RuleNameService ruleNameService;
+
+    /**
+     * Displays the list of all RuleName entries.
+     *
+     * @param model the model to pass attributes to the view
+     * @return the ruleName list view
+     */
     @RequestMapping("/ruleName/list")
-    public String home(Model model)
+    public String showRuleNameList(Model model)
     {
-        // TODO: find all RuleName, add to model
         List<RuleName> ruleNameList = ruleNameService.findAll();
         model.addAttribute("ruleNames", ruleNameList);
 
@@ -35,14 +44,27 @@ public class RuleNameController {
         return "ruleName/list";
     }
 
+    /**
+     * Displays the form to add a new RuleName.
+     *
+     * @param ruleName a RuleName object for form binding
+     * @return the add form view
+     */
     @GetMapping("/ruleName/add")
     public String addRuleForm(RuleName bid) {
         return "ruleName/add";
     }
 
+     /**
+     * Validates and saves a new RuleName entry.
+     *
+     * @param ruleName the RuleName to save
+     * @param result validation result
+     * @param model the model to pass attributes to the view
+     * @return redirect to list if success, or reload form if validation fails
+     */
     @PostMapping("/ruleName/validate")
     public String validate(@Valid RuleName ruleName, BindingResult result, Model model) {
-        // TODO: check data valid and save to db, after saving return RuleName list
         if (result.hasFieldErrors()) {
             model.addAttribute("ruleName", ruleName);
             return "ruleName/add";
@@ -51,9 +73,15 @@ public class RuleNameController {
         return "redirect:/ruleName/list";
     }
 
+    /**
+     * Displays the form to update an existing RuleName.
+     *
+     * @param id the ID of the RuleName to update
+     * @param model the model to pass data to the view
+     * @return the update form view or redirect if not found
+     */
     @GetMapping("/ruleName/update/{id}")
     public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
-        // TODO: get RuleName by Id and to model then show to the form
         RuleName ruleName = ruleNameService.findById(id);
         if (ruleName != null) {
             model.addAttribute("ruleName", ruleName);
@@ -64,10 +92,18 @@ public class RuleNameController {
         return "ruleName/update";
     }
 
+    /**
+     * Validates and updates an existing RuleName.
+     *
+     * @param id the ID of the RuleName to update
+     * @param ruleName the updated RuleName data
+     * @param result validation result
+     * @param model the model to pass data to the view
+     * @return redirect to list or reload form if validation fails
+     */
     @PostMapping("/ruleName/update/{id}")
     public String updateRuleName(@PathVariable("id") Integer id, @Valid RuleName ruleName,
                              BindingResult result, Model model) {
-        // TODO: check required fields, if valid call service to update RuleName and return RuleName list
         if (result.hasFieldErrors()) {
             model.addAttribute("ruleName", ruleName);
             return "ruleName/update";
@@ -77,9 +113,15 @@ public class RuleNameController {
         return "redirect:/ruleName/list";
     }
 
+    /**
+     * Deletes a RuleName entry by ID.
+     *
+     * @param id the ID of the RuleName to delete
+     * @param model the model to pass messages to the view
+     * @return redirect to the RuleName list view
+     */
     @GetMapping("/ruleName/delete/{id}")
     public String deleteRuleName(@PathVariable("id") Integer id, Model model) {
-        // TODO: Find RuleName by Id and delete the RuleName, return to Rule list
         RuleName ruleName = ruleNameService.findById(id);
         if (ruleName != null) {
             ruleNameService.delete(id);

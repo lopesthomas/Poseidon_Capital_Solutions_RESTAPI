@@ -17,16 +17,24 @@ import com.nnk.springboot.services.CurvePointService;
 
 import jakarta.validation.Valid;
 
+/**
+ * Controller for managing CurvePoint entities.
+ * Provides endpoints for listing, creating, updating, and deleting curve points.
+ */
 @Controller
 public class CurveController {
-    // TODO: Inject Curve Point service
     @Autowired
     private CurvePointService curvePointService;
 
+    /**
+     * Displays the list of all curve points.
+     *
+     * @param model the model to pass data to the view
+     * @return the curve point list view
+     */
     @RequestMapping("/curvePoint/list")
-    public String home(Model model)
+    public String showCurvePointList(Model model)
     {
-        // TODO: find all Curve Point, add to model
         List<CurvePoint> curvePoints = curvePointService.findAll();
         model.addAttribute("curvePoints", curvePoints);
 
@@ -35,14 +43,27 @@ public class CurveController {
         return "curvePoint/list";
     }
 
+    /**
+     * Displays the form to add a new curve point.
+     *
+     * @param curvePoint the curve point model attribute
+     * @return the curve point addition form view
+     */
     @GetMapping("/curvePoint/add")
-    public String addBidForm(CurvePoint bid) {
+    public String addCurvePointForm(CurvePoint bid) {
         return "curvePoint/add";
     }
 
+    /**
+     * Validates and saves a new curve point.
+     *
+     * @param curvePoint the curve point to validate and save
+     * @param result validation results
+     * @param model the model to pass data to the view
+     * @return redirection to list or back to form if errors
+     */
     @PostMapping("/curvePoint/validate")
     public String validate(@Valid CurvePoint curvePoint, BindingResult result, Model model) {
-        // TODO: check data valid and save to db, after saving return Curve list
         if (result.hasFieldErrors()) {
             model.addAttribute("curvePoints", curvePoint);
             return "curvePoint/add"; // ou "curvePoint/update" selon le cas
@@ -51,9 +72,15 @@ public class CurveController {
         return "redirect:/curvePoint/list";
     }
 
+    /**
+     * Displays the form to update an existing curve point.
+     *
+     * @param id the ID of the curve point
+     * @param model the model to pass data to the view
+     * @return the curve point update form view
+     */
     @GetMapping("/curvePoint/update/{id}")
     public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
-        // TODO: get CurvePoint by Id and to model then show to the form
         CurvePoint curvePoint = curvePointService.findById(id);
         if (curvePoint != null) {
             model.addAttribute("curvePoint", curvePoint);
@@ -63,10 +90,18 @@ public class CurveController {
         return "curvePoint/update";
     }
 
+    /**
+     * Validates and updates an existing curve point.
+     *
+     * @param id the ID of the curve point to update
+     * @param curvePoint the updated curve point data
+     * @param result validation results
+     * @param model the model to pass data to the view
+     * @return redirection to list or back to form if errors
+     */
     @PostMapping("/curvePoint/update/{id}")
-    public String updateBid(@PathVariable("id") Integer id, @Valid CurvePoint curvePoint,
+    public String updateCurvePoint(@PathVariable("id") Integer id, @Valid CurvePoint curvePoint,
                              BindingResult result, Model model) {
-        // TODO: check required fields, if valid call service to update Curve and return Curve list
         if (result.hasFieldErrors()) {
             model.addAttribute("curvePoint", curvePoint);
             return "curvePoint/update";
@@ -77,9 +112,15 @@ public class CurveController {
         return "redirect:/curvePoint/list";
     }
 
+    /**
+     * Deletes a curve point by its ID.
+     *
+     * @param id the ID of the curve point
+     * @param model the model to pass data to the view
+     * @return redirection to the curve point list
+     */
     @GetMapping("/curvePoint/delete/{id}")
-    public String deleteBid(@PathVariable("id") Integer id, Model model) {
-        // TODO: Find Curve by Id and delete the Curve, return to Curve list
+    public String deleteCurvePoint(@PathVariable("id") Integer id, Model model) {
         CurvePoint curvePoint = curvePointService.findById(id);
         if (curvePoint != null) {
             curvePointService.delete(id);

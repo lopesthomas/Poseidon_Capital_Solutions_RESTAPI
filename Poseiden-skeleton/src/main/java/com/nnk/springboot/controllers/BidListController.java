@@ -17,34 +17,54 @@ import com.nnk.springboot.services.BidListService;
 
 import jakarta.validation.Valid;
 
-
-
+/**
+ * Controller for managing BidList entities.
+ * Provides endpoints for listing, creating, updating, and deleting bids.
+ */
 @Controller
 public class BidListController {
-    // TODO: Inject Bid service
+
     @Autowired
     private BidListService bidListService;
 
+    /**
+     * Displays the list of all bids.
+     *
+     * @param model the model to pass data to the view
+     * @return the bid list view
+     */
     @RequestMapping("/bidList/list")
-    public String home(Model model)
+    public String showBidList(Model model)
     {
         List<BidList> bidList = bidListService.findAll();
         model.addAttribute("bidList", bidList);
 
         String remoteUser = SecurityContextHolder.getContext().getAuthentication().getName();
         model.addAttribute("remoteUser", remoteUser);
-        // TODO: call service find all bids to show to the view
         return "bidList/list";
     }
 
+    /**
+     * Displays the form to add a new bid.
+     *
+     * @param bid the bid model attribute
+     * @return the bid addition form view
+     */
     @GetMapping("/bidList/add")
     public String addBidForm(BidList bid) {
         return "bidList/add";
     }
 
+    /**
+     * Validates and saves a new bid.
+     *
+     * @param bid the bid to validate and save
+     * @param result validation results
+     * @param model the model to pass data to the view
+     * @return redirection to bid list or back to form if errors
+     */
     @PostMapping("/bidList/validate")
     public String validate(@Valid BidList bid, BindingResult result, Model model) {
-        // TODO: check data valid and save to db, after saving return bid list
         if (result.hasFieldErrors()) {
             model.addAttribute("bidList", bid);
             return "bidList/add";
@@ -53,9 +73,15 @@ public class BidListController {
         return "redirect:/bidList/list";
     }
 
+    /**
+     * Displays the form to update an existing bid.
+     *
+     * @param id the ID of the bid to update
+     * @param model the model to pass data to the view
+     * @return the bid update form view
+     */
     @GetMapping("/bidList/update/{id}")
     public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
-        // TODO: get Bid by Id and to model then show to the form
         BidList bidList = bidListService.findById(id);
         if (bidList != null) {
             model.addAttribute("bidList", bidList);
@@ -66,10 +92,18 @@ public class BidListController {
         return "bidList/update";
     }
 
+    /**
+     * Validates and updates an existing bid.
+     *
+     * @param id the ID of the bid to update
+     * @param bidList the updated bid data
+     * @param result validation results
+     * @param model the model to pass data to the view
+     * @return redirection to bid list or back to form if errors
+     */
     @PostMapping("/bidList/update/{id}")
     public String updateBid(@PathVariable("id") Integer id, @Valid BidList bidList,
                              BindingResult result, Model model) {
-        // TODO: check required fields, if valid call service to update Bid and return list Bid
         if (result.hasErrors()) {
             bidList.setBidListId(id);
             return "bidList/update";
@@ -80,9 +114,15 @@ public class BidListController {
         return "redirect:/bidList/list";
     }
 
+    /**
+     * Deletes a bid by ID.
+     *
+     * @param id the ID of the bid to delete
+     * @param model the model to pass data to the view
+     * @return redirection to bid list
+     */
     @GetMapping("/bidList/delete/{id}")
     public String deleteBid(@PathVariable("id") Integer id, Model model) {
-        // TODO: Find Bid by Id and delete the bid, return to Bid list
         BidList bidList = bidListService.findById(id);
         if (bidList != null) {
             bidListService.deleteById(id);

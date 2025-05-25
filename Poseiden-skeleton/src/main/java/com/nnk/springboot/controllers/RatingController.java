@@ -17,16 +17,24 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import jakarta.validation.Valid;
 
+/**
+ * Controller to handle Rating-related web requests.
+ * Provides endpoints to list, create, update, and delete ratings.
+ */
 @Controller
 public class RatingController {
-    // TODO: Inject Rating service
     @Autowired
     private RatingService ratingService;
 
+    /**
+     * Displays the list of all ratings.
+     *
+     * @param model the model to pass data to the view
+     * @return the view for the rating list
+     */
     @RequestMapping("/rating/list")
-    public String home(Model model)
+    public String showRatingList(Model model)
     {
-        // TODO: find all Rating, add to model
         List<Rating> ratingList = ratingService.findAll();
         model.addAttribute("ratings", ratingList);
 
@@ -35,14 +43,27 @@ public class RatingController {
         return "rating/list";
     }
 
+    /**
+     * Displays the form to add a new rating.
+     *
+     * @param rating the rating model attribute
+     * @return the view for adding a new rating
+     */
     @GetMapping("/rating/add")
     public String addRatingForm(Rating rating) {
         return "rating/add";
     }
 
+    /**
+     * Validates and saves a new rating.
+     *
+     * @param rating the rating to validate and save
+     * @param result validation results
+     * @param model the model to pass data to the view
+     * @return redirect to list or return to form if validation errors
+     */
     @PostMapping("/rating/validate")
     public String validate(@Valid Rating rating, BindingResult result, Model model) {
-        // TODO: check data valid and save to db, after saving return Rating list
         if (result.hasFieldErrors()) {
             model.addAttribute("rating", rating);
             return "rating/add";
@@ -51,9 +72,15 @@ public class RatingController {
         return "redirect:/rating/list";
     }
 
+    /**
+     * Displays the form to update an existing rating.
+     *
+     * @param id the ID of the rating to update
+     * @param model the model to pass data to the view
+     * @return the view for updating a rating or error if not found
+     */
     @GetMapping("/rating/update/{id}")
     public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
-        // TODO: get Rating by Id and to model then show to the form
         Rating rating = ratingService.findById(id);
         if (rating != null) {
             model.addAttribute("rating", rating);
@@ -63,10 +90,18 @@ public class RatingController {
         return "rating/update";
     }
 
+    /**
+     * Validates and updates an existing rating.
+     *
+     * @param id the ID of the rating to update
+     * @param rating the updated rating data
+     * @param result validation results
+     * @param model the model to pass data to the view
+     * @return redirect to list or return to form if validation errors
+     */
     @PostMapping("/rating/update/{id}")
     public String updateRating(@PathVariable("id") Integer id, @Valid Rating rating,
                              BindingResult result, Model model) {
-        // TODO: check required fields, if valid call service to update Rating and return Rating list
         if (result.hasFieldErrors()) {
             model.addAttribute("rating", rating);
             return "rating/update";
@@ -76,9 +111,15 @@ public class RatingController {
         return "redirect:/rating/list";
     }
 
+    /**
+     * Deletes an existing rating by ID.
+     *
+     * @param id the ID of the rating to delete
+     * @param model the model to pass error messages to the view
+     * @return redirect to rating list
+     */
     @GetMapping("/rating/delete/{id}")
     public String deleteRating(@PathVariable("id") Integer id, Model model) {
-        // TODO: Find Rating by Id and delete the Rating, return to Rating list
         Rating rating = ratingService.findById(id);
         if (rating != null) {
             ratingService.delete(id);
