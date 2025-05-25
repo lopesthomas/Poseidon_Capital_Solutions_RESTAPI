@@ -1,8 +1,5 @@
 package com.nnk.springboot.controllers;
 
-import com.nnk.springboot.domain.BidList;
-import com.nnk.springboot.repositories.BidListRepository;
-
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +12,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.nnk.springboot.domain.BidList;
+import com.nnk.springboot.services.BidListService;
+
 import jakarta.validation.Valid;
 
 
@@ -23,12 +23,12 @@ import jakarta.validation.Valid;
 public class BidListController {
     // TODO: Inject Bid service
     @Autowired
-    private BidListRepository bidListRepository;
+    private BidListService bidListService;
 
     @RequestMapping("/bidList/list")
     public String home(Model model)
     {
-        List<BidList> bidList = bidListRepository.findAll();
+        List<BidList> bidList = bidListService.findAll();
         model.addAttribute("bidList", bidList);
 
         String remoteUser = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -49,14 +49,14 @@ public class BidListController {
             model.addAttribute("bidList", bid);
             return "bidList/add";
         }
-        bidListRepository.save(bid);
+        bidListService.save(bid);
         return "redirect:/bidList/list";
     }
 
     @GetMapping("/bidList/update/{id}")
     public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
         // TODO: get Bid by Id and to model then show to the form
-        BidList bidList = bidListRepository.findById(id).orElse(null);
+        BidList bidList = bidListService.findById(id);
         if (bidList != null) {
             model.addAttribute("bidList", bidList);
         } else {
@@ -75,7 +75,7 @@ public class BidListController {
             return "bidList/update";
         } else {
             bidList.setBidListId(id);
-            bidListRepository.save(bidList);
+            bidListService.save(bidList);
         }
         return "redirect:/bidList/list";
     }
@@ -83,9 +83,9 @@ public class BidListController {
     @GetMapping("/bidList/delete/{id}")
     public String deleteBid(@PathVariable("id") Integer id, Model model) {
         // TODO: Find Bid by Id and delete the bid, return to Bid list
-        BidList bidList = bidListRepository.findById(id).orElse(null);
+        BidList bidList = bidListService.findById(id);
         if (bidList != null) {
-            bidListRepository.delete(bidList);
+            bidListService.deleteById(id);
         } else {
             model.addAttribute("error", "Bid not found");
         }

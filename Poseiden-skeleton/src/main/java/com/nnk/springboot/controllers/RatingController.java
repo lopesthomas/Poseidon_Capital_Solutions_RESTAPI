@@ -1,7 +1,7 @@
 package com.nnk.springboot.controllers;
 
 import com.nnk.springboot.domain.Rating;
-import com.nnk.springboot.repositories.RatingRepository;
+import com.nnk.springboot.services.RatingService;
 
 import java.util.List;
 
@@ -21,13 +21,13 @@ import jakarta.validation.Valid;
 public class RatingController {
     // TODO: Inject Rating service
     @Autowired
-    private RatingRepository ratingRepository;
+    private RatingService ratingService;
 
     @RequestMapping("/rating/list")
     public String home(Model model)
     {
         // TODO: find all Rating, add to model
-        List<Rating> ratingList = ratingRepository.findAll();
+        List<Rating> ratingList = ratingService.findAll();
         model.addAttribute("ratings", ratingList);
 
         String remoteUser = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -47,14 +47,14 @@ public class RatingController {
             model.addAttribute("rating", rating);
             return "rating/add";
         }
-        ratingRepository.save(rating);
+        ratingService.save(rating);
         return "redirect:/rating/list";
     }
 
     @GetMapping("/rating/update/{id}")
     public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
         // TODO: get Rating by Id and to model then show to the form
-        Rating rating = ratingRepository.findById(id).orElse(null);
+        Rating rating = ratingService.findById(id);
         if (rating != null) {
             model.addAttribute("rating", rating);
         } else {
@@ -72,16 +72,16 @@ public class RatingController {
             return "rating/update";
         }
         rating.setId(id);
-        ratingRepository.save(rating);
+        ratingService.save(rating);
         return "redirect:/rating/list";
     }
 
     @GetMapping("/rating/delete/{id}")
     public String deleteRating(@PathVariable("id") Integer id, Model model) {
         // TODO: Find Rating by Id and delete the Rating, return to Rating list
-        Rating rating = ratingRepository.findById(id).orElse(null);
+        Rating rating = ratingService.findById(id);
         if (rating != null) {
-            ratingRepository.delete(rating);
+            ratingService.delete(id);
         } else {
             model.addAttribute("error", "Rating not found");
         }

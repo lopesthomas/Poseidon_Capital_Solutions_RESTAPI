@@ -1,7 +1,7 @@
 package com.nnk.springboot.controllers;
 
 import com.nnk.springboot.domain.RuleName;
-import com.nnk.springboot.repositories.RuleNameRepository;
+import com.nnk.springboot.services.RuleNameService;
 
 import java.util.List;
 
@@ -21,13 +21,13 @@ import jakarta.validation.Valid;
 public class RuleNameController {
     // TODO: Inject RuleName service
     @Autowired
-    private RuleNameRepository ruleNameRepository;
+    private RuleNameService ruleNameService;;
 
     @RequestMapping("/ruleName/list")
     public String home(Model model)
     {
         // TODO: find all RuleName, add to model
-        List<RuleName> ruleNameList = ruleNameRepository.findAll();
+        List<RuleName> ruleNameList = ruleNameService.findAll();
         model.addAttribute("ruleNames", ruleNameList);
 
         String remoteUser = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -47,14 +47,14 @@ public class RuleNameController {
             model.addAttribute("ruleName", ruleName);
             return "ruleName/add";
         }
-        ruleNameRepository.save(ruleName);
+        ruleNameService.save(ruleName);
         return "redirect:/ruleName/list";
     }
 
     @GetMapping("/ruleName/update/{id}")
     public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
         // TODO: get RuleName by Id and to model then show to the form
-        RuleName ruleName = ruleNameRepository.findById(id).orElse(null);
+        RuleName ruleName = ruleNameService.findById(id);
         if (ruleName != null) {
             model.addAttribute("ruleName", ruleName);
         } else {
@@ -73,16 +73,16 @@ public class RuleNameController {
             return "ruleName/update";
         }
         ruleName.setId(id);
-        ruleNameRepository.save(ruleName);
+        ruleNameService.save(ruleName);
         return "redirect:/ruleName/list";
     }
 
     @GetMapping("/ruleName/delete/{id}")
     public String deleteRuleName(@PathVariable("id") Integer id, Model model) {
         // TODO: Find RuleName by Id and delete the RuleName, return to Rule list
-        RuleName ruleName = ruleNameRepository.findById(id).orElse(null);
+        RuleName ruleName = ruleNameService.findById(id);
         if (ruleName != null) {
-            ruleNameRepository.delete(ruleName);
+            ruleNameService.delete(id);
         } else {
             model.addAttribute("error", "RuleName not found");
         }

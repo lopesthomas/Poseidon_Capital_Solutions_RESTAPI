@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.nnk.springboot.domain.CurvePoint;
-import com.nnk.springboot.repositories.CurvePointRepository;
+import com.nnk.springboot.services.CurvePointService;
 
 import jakarta.validation.Valid;
 
@@ -21,13 +21,13 @@ import jakarta.validation.Valid;
 public class CurveController {
     // TODO: Inject Curve Point service
     @Autowired
-    private CurvePointRepository curvePointRepository;
+    private CurvePointService curvePointService;
 
     @RequestMapping("/curvePoint/list")
     public String home(Model model)
     {
         // TODO: find all Curve Point, add to model
-        List<CurvePoint> curvePoints = curvePointRepository.findAll();
+        List<CurvePoint> curvePoints = curvePointService.findAll();
         model.addAttribute("curvePoints", curvePoints);
 
         String remoteUser = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -47,14 +47,14 @@ public class CurveController {
             model.addAttribute("curvePoints", curvePoint);
             return "curvePoint/add"; // ou "curvePoint/update" selon le cas
         }
-        curvePointRepository.save(curvePoint);
+        curvePointService.save(curvePoint);
         return "redirect:/curvePoint/list";
     }
 
     @GetMapping("/curvePoint/update/{id}")
     public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
         // TODO: get CurvePoint by Id and to model then show to the form
-        CurvePoint curvePoint = curvePointRepository.findById(id).orElse(null);
+        CurvePoint curvePoint = curvePointService.findById(id);
         if (curvePoint != null) {
             model.addAttribute("curvePoint", curvePoint);
         } else {
@@ -72,7 +72,7 @@ public class CurveController {
             return "curvePoint/update";
         }
         curvePoint.setId(id);
-        curvePointRepository.save(curvePoint);
+        curvePointService.save(curvePoint);
 
         return "redirect:/curvePoint/list";
     }
@@ -80,9 +80,9 @@ public class CurveController {
     @GetMapping("/curvePoint/delete/{id}")
     public String deleteBid(@PathVariable("id") Integer id, Model model) {
         // TODO: Find Curve by Id and delete the Curve, return to Curve list
-        CurvePoint curvePoint = curvePointRepository.findById(id).orElse(null);
+        CurvePoint curvePoint = curvePointService.findById(id);
         if (curvePoint != null) {
-            curvePointRepository.delete(curvePoint);
+            curvePointService.delete(id);
         } else {
             model.addAttribute("error", "CurvePoint not found");
         }

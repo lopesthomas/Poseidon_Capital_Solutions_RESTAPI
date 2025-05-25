@@ -1,7 +1,7 @@
 package com.nnk.springboot.controllers;
 
 import com.nnk.springboot.domain.Trade;
-import com.nnk.springboot.repositories.TradeRepository;
+import com.nnk.springboot.services.TradeService;
 
 import java.util.List;
 
@@ -20,13 +20,13 @@ import jakarta.validation.Valid;
 public class TradeController {
     // TODO: Inject Trade service
     @Autowired
-    private TradeRepository tradeRepository;
+    private TradeService tradeService;
 
     @RequestMapping("/trade/list")
     public String home(Model model)
     {
         // TODO: find all Trade, add to model
-        List<Trade> tradeList = tradeRepository.findAll();
+        List<Trade> tradeList = tradeService.findAll();
         model.addAttribute("trades", tradeList);
 
         String remoteUser = org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication().getName();
@@ -46,14 +46,14 @@ public class TradeController {
             model.addAttribute("trade", trade);
             return "trade/add";
         }
-        tradeRepository.save(trade);
+        tradeService.save(trade);
         return "redirect:/trade/list";
     }
 
     @GetMapping("/trade/update/{id}")
     public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
         // TODO: get Trade by Id and to model then show to the form
-        Trade trade = tradeRepository.findById(id).orElse(null);
+        Trade trade = tradeService.findById(id);
         if (trade != null) {
             model.addAttribute("trade", trade);
         } else {
@@ -71,16 +71,16 @@ public class TradeController {
             return "trade/update";
         }
         trade.setId(id);
-        tradeRepository.save(trade);
+        tradeService.save(trade);
         return "redirect:/trade/list";
     }
 
     @GetMapping("/trade/delete/{id}")
     public String deleteTrade(@PathVariable("id") Integer id, Model model) {
         // TODO: Find Trade by Id and delete the Trade, return to Trade list
-        Trade trade = tradeRepository.findById(id).orElse(null);
+        Trade trade = tradeService.findById(id);
         if (trade != null) {
-            tradeRepository.delete(trade);
+            tradeService.delete(id);
         } else {
             model.addAttribute("error", "Trade not found");
         }
