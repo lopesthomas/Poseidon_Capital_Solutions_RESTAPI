@@ -127,7 +127,7 @@ public class UserController {
         User user = userService.findById(id);
         if (user == null) {
             model.addAttribute("error", "User not found");
-            return "user/list";
+            return "redirect:/user/list";
         }
         userService.delete(id);
         model.addAttribute("users", userService.findAll());
