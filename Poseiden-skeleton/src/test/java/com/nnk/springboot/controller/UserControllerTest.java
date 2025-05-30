@@ -60,8 +60,8 @@ public class UserControllerTest {
     public void testValidateUser_valid() throws Exception {
         mockMvc.perform(post("/user/validate")
                         .with(csrf())
-                        .param("username", "john")
-                        .param("fullname", "John Doe")
+                        .param("username", "Test Username")
+                        .param("fullname", "Test Fullname")
                         .param("role", "USER")
                         .param("password", "12345678"))
                 .andDo(print())
@@ -85,7 +85,7 @@ public class UserControllerTest {
     public void testShowUpdateForm() throws Exception {
         User user = new User();
         user.setId(1);
-        user.setUsername("john");
+        user.setUsername("Test Username");
         user.setPassword("encoded");
         when(userService.findById(1)).thenReturn(user);
 
@@ -99,8 +99,8 @@ public class UserControllerTest {
     public void testUpdateUser_valid() throws Exception {
         mockMvc.perform(post("/user/update/1")
                         .with(csrf())
-                        .param("username", "john")
-                        .param("fullname", "John Doe")
+                        .param("username", "Test Username")
+                        .param("fullname", "Test Fullname")
                         .param("role", "USER")
                         .param("password", "newpass"))
                 .andExpect(status().is3xxRedirection())

@@ -24,7 +24,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Trade {
-    // TODO: Map columns in data table TRADE with corresponding java fields
 
     @Id
     @Column(name = "tradeId")

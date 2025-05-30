@@ -20,7 +20,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Rating {
-    // TODO: Map columns in data table RATING with corresponding java fields
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
