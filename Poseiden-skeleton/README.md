@@ -25,7 +25,7 @@
 ### 📦 **Clone the Repository**
 ```sh
 git clone https://github.com/lopesthomas/Poseidon_Capital_Solutions_RESTAPI.git
-cd Poseiden-skeleton
+cd Poseidon_Capital_Solutions_RESTAPI\Poseiden-skeleton
 ```
 
 ### 🏗 **Build the Project**
