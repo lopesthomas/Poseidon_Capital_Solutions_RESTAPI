@@ -4,13 +4,13 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>net.guides.springboothelloworld</groupId>
-	<artifactId>spring-boot-skeleton</artifactId>
+	<groupId>com.nnk.springboot</groupId>
+	<artifactId>spring-boot-poseidon</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>spring-boot-skeleton</name>
-	<description>Demo project for Spring Boot</description>
+	<name>spring-boot-poseidon</name>
+	<description>Prototype Application</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -91,6 +91,11 @@
 
 	<build>
 		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-report-plugin</artifactId>
+				<version>3.5.3</version>
+			</plugin>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
