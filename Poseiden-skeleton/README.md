@@ -1,27 +1,40 @@
-# spring-boot
-## Technical:
+<a id="readme-top"></a>
+<br /> 
+<div align="center">
+   <a href="https://github.com/lopesthomas/Poseidon_Capital_Solutions_RESTAPI/tree/master"> <img src="https://user.oc-static.com/upload/2023/07/19/16897714860057_fr_DA-JAVA_P7-P8-P9_P7-02.png" alt="Logo"> </a> 
+   <p align="center"> 
+   <h2>🏛️ Poseidon Capital Solutions - Spring Boot Web App</h2>
+   <h3>📌 Overview</h3>
+   <strong>Poseidon</strong> is a Java-based web application built with <strong>Spring Boot</strong> for managing financial data through several core business entities such as Bid, Rating, Trade, RuleName, CurvePoint, and User. <br /><br /> 
+   <div align="center">
+      <p align="justify"> 🧩 With this project, you can:<br><br> &nbsp;&nbsp;&nbsp;✅ Perform full CRUD operations on 6 business entities<br> &nbsp;&nbsp;&nbsp;✅ Authenticate and authorize users based on roles (USER / ADMIN)<br> &nbsp;&nbsp;&nbsp;✅ Secure the application using Spring Security (session-based)<br> &nbsp;&nbsp;&nbsp;✅ Validate form input with business constraints<br> &nbsp;&nbsp;&nbsp;✅ Test business logic using JUnit, Mockito, and Surefire </p>
+   </div>
+   <br /> </p> 
+</div>
 
-1. Spring Boot 3.1.0
-2. Java 17
-3. Thymeleaf
-4. Bootstrap v.4.3.1
+<!-- ABOUT THE PROJECT -->
+<h2 align="center">🚀 Installation & Setup  </h2>
 
 
-## Setup with Intellij IDE
-1. Create project from Initializr: File > New > project > Spring Initializr
-2. Add lib repository into pom.xml
-3. Add folders
-    - Source root: src/main/java
-    - View: src/main/resources
-    - Static: src/main/resource/static
-4. Create database with name "demo" as configuration in application.properties
-5. Run sql script to create table doc/data.sql
+### 🔧 **Prerequisites**  
+- Java 17+  
+- Maven  
+- IDE (IntelliJ, VSCode, Eclipse…)
+- MySQL 
 
-## Implement a Feature
-1. Create mapping domain class and place in package com.nnk.springboot.domain
-2. Create repository class and place in package com.nnk.springboot.repositories
-3. Create controller class and place in package com.nnk.springboot.controllers
+### 📦 **Clone the Repository**
+```sh
+git clone https://github.com/lopesthomas/Poseidon_Capital_Solutions_RESTAPI.git
+cd Poseiden-skeleton
+```
 
-## Security
-1. Create user service to load user from  database and place in package com.nnk.springboot.services
-2. Add configuration class and place in package com.nnk.springboot.config
+### 🏗 **Build the Project**
+```sh
+mvn clean install
+```
+
+### ▶ **Run the Application**
+```sh
+mvn spring-boot:run
+```
+By default, the app runs at: http://localhost:8080/
