@@ -63,10 +63,11 @@ public class UserController {
     public String validate(@Valid User user, BindingResult result, Model model) {
         if (!result.hasErrors()) {
             BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-            user.setPassword(encoder.encode(user.getPassword()));
+            user.setPassword(encoder.encode(user.getRawPassword()));
             userService.save(user);
             return "redirect:/user/list";
         }
+        model.addAttribute("user", user);
         return "user/add";
     }
 
@@ -82,6 +83,7 @@ public class UserController {
         User user = userService.findById(id);
         if (user != null) {
             user.setPassword("");
+            user.setRawPassword("");
             model.addAttribute("user", user);
             return "user/update";
         }
@@ -107,7 +109,7 @@ public class UserController {
         }
 
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        user.setPassword(encoder.encode(user.getPassword()));
+        user.setPassword(encoder.encode(user.getRawPassword()));
         user.setId(id);
         userService.save(user);
         model.addAttribute("users", userService.findAll());
